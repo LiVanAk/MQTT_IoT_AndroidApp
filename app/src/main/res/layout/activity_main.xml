@@ -10,8 +10,26 @@
     <Button
         android:id="@+id/btn_connect"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:text="建立连接" />
+
+    <Button
+        android:id="@+id/btn_mode"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="调整模式" />
+
+    <Button
+        android:id="@+id/btn_measure"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="称重" />
+
+    <Button
+        android:id="@+id/btn_check"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="检查" />
 
     <EditText
         android:id="@+id/et_topic"
@@ -19,7 +37,7 @@
         android:layout_height="wrap_content"
         android:hint="输入订阅的Topic"
         android:textColor="@color/black"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="0dp"/>
 
     <Button
         android:id="@+id/btn_topic"
@@ -34,19 +52,19 @@
         android:layout_height="wrap_content"
         android:hint="输入发送的Message"
         android:textColor="@color/black"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="0dp"/>
 
     <Button
         android:id="@+id/btn_echo"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:text="发送"
         android:textAllCaps="false" />
 
     <Button
         android:id="@+id/btn_disconnect"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:text="断开连接" />
 
     <LinearLayout

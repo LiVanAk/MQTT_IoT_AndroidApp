@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 //    private String topic = "weight";
     private String topic;
     private String message;
-
+    private int mode = 0;
 
 
 
@@ -55,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
 
         binding.btnTopic.setOnClickListener(v -> {
             subscribe(etTopic);
+        });
+
+        binding.btnMode.setOnClickListener(v -> {
+            changeMode();
+        });
+
+        binding.btnMeasure.setOnClickListener(v -> {
+            measure();
+        });
+
+        binding.btnCheck.setOnClickListener(v -> {
+            etc();
         });
 
         binding.btnEcho.setOnClickListener(v -> {
@@ -140,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         message = etMessage.getText().toString().trim();
         topic = etTopic.getText().toString().trim();  // 使用订阅的 topic 发送消息
         if (mqttAndroidClient == null || !mqttAndroidClient.isConnected()) {
+            appendStatus("请先连接MQTT服务器");
             return;
         }
         Log.i(TAG,"echo测试");
@@ -156,6 +169,108 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
                     appendStatus("向\""+topic+"\"发送消息失败");
+                }
+            });
+        } catch (MqttException e) {
+            Log.i(TAG, "echo Exceptions : " + e);
+            e.printStackTrace();
+        }
+    }
+
+    private void changeMode() {
+        if (mqttAndroidClient == null || !mqttAndroidClient.isConnected()) {
+            appendStatus("请先连接MQTT服务器");
+            return;
+        }
+        topic = "mode";
+        mode = 1-mode;
+        message = String.valueOf(mode);
+        Log.i(TAG,"echo测试");
+        MqttMessage Message = new MqttMessage();
+        Message.setQos(2);
+        Message.setPayload(message.getBytes());
+        try {
+            mqttAndroidClient.publish(topic, Message, null, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    if(mode==1){
+                        appendStatus("模式转变为主动发送模式");
+                    }
+                    else{
+                        appendStatus("模式转变为询问模式");
+                    }
+
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    appendStatus("模式转变失败");
+                }
+            });
+        } catch (MqttException e) {
+            Log.i(TAG, "echo Exceptions : " + e);
+            e.printStackTrace();
+        }
+    }
+
+    private void measure() {
+        if (mqttAndroidClient == null || !mqttAndroidClient.isConnected()) {
+            appendStatus("请先连接MQTT服务器");
+            return;
+        }
+        if (mode==1) {
+            appendStatus("请先转变为询问模式");
+            return;
+        }
+        topic = "weight";
+        message = "measure";
+        Log.i(TAG,"echo测试");
+        MqttMessage Message = new MqttMessage();
+        Message.setQos(2);
+        Message.setPayload(message.getBytes());
+        try {
+            mqttAndroidClient.publish(topic, Message, null, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    appendStatus("称重成功");
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    appendStatus("称重失败");
+                }
+            });
+        } catch (MqttException e) {
+            Log.i(TAG, "echo Exceptions : " + e);
+            e.printStackTrace();
+        }
+    }
+
+    private void etc() {
+        if (mqttAndroidClient == null || !mqttAndroidClient.isConnected()) {
+            appendStatus("请先连接MQTT服务器");
+            return;
+        }
+        if (mode==1) {
+            appendStatus("请先转变为询问模式");
+            return;
+        }
+        topic = "etc";
+        message = "check";
+        Log.i(TAG,"echo测试");
+        MqttMessage Message = new MqttMessage();
+        Message.setQos(2);
+        Message.setPayload(message.getBytes());
+        try {
+            mqttAndroidClient.publish(topic, Message, null, new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    appendStatus("获取标签成功");
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    appendStatus("获取标签失败");
                 }
             });
         } catch (MqttException e) {
